@@ -116,10 +116,35 @@ export function classifyStatus(code: number): StatusCategory {
  * nombre y valor. Recuerda `.trim()` para quitar espacios sobrantes.
  */
 export function parseHeaders(text: string): Headers {
-  // TODO: tu implementación aquí
-  throw new Error("Not implemented");
-}
+  const headers: Headers = {};
 
+  const lines = text.split(/\r?\n/);
+
+  for (const line of lines) {
+    const trimmedLine = line.trim();
+
+    if (trimmedLine === "") {
+      continue;
+    }
+
+    const separatorIndex = trimmedLine.indexOf(":");
+
+    if (separatorIndex === -1) {
+      continue;
+    }
+
+    const name = trimmedLine.slice(0, separatorIndex).trim();
+    const value = trimmedLine.slice(separatorIndex + 1).trim();
+
+    if (name === "") {
+      continue;
+    }
+
+    headers[name] = value;
+  }
+
+  return headers;
+}
 /**
  * TODO: Combina las funciones anteriores en un resumen legible.
  *
@@ -139,8 +164,30 @@ export function summarizeRequest(
   status: number,
   headersText: string,
 ): string {
-  // TODO: tu implementación aquí
-  throw new Error("Not implemented");
+  const urlParts = parseUrl(url);
+  const statusCategory = classifyStatus(status);
+  const headers = parseHeaders(headersText);
+
+  const headerEntries = Object.entries(headers);
+
+  const formattedHeaders =
+    headerEntries.length > 0
+      ? headerEntries
+          .map(([name, value]) => `  • ${name}: ${value}`)
+          .join("\n")
+      : "  Sin cabeceras";
+
+  return [
+    "Resumen de la petición",
+    "──────────────────────",
+    `URL: ${url}`,
+    `Protocolo: ${urlParts.protocol}`,
+    `Host: ${urlParts.host}`,
+    `Ruta: ${urlParts.pathname}`,
+    `Status: ${status} (${statusCategory})`,
+    "Headers:",
+    formattedHeaders,
+  ].join("\n");
 }
 
 // ---------------------------------------------------------------------------
