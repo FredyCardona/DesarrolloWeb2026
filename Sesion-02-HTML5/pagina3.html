@@ -3,35 +3,140 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Sitio — Pagina 2</title>
+
+  <meta
+    name="description"
+    content="Recursos y plan básico para aprender desarrollo web"
+  >
+
+  <meta name="author" content="Fredy Cardona">
+
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%BB%3C/text%3E%3C/svg%3E"
+  >
+
+  <title>Mi Sitio — Recursos</title>
 </head>
+
 <body>
+  <a href="#contenido-principal">
+    Saltar al contenido principal
+  </a>
+
   <header>
-    <h1>Mi Sitio</h1>
-    <nav>
+    <h1>Mi Sitio de Desarrollo Web</h1>
+
+    <nav aria-label="Navegación principal">
       <ul>
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="pagina1.html">Pagina 1</a></li>
-        <li><a href="pagina2.html">Pagina 2</a></li>
-        <li><a href="pagina3.html">Pagina 3</a></li>
+        <li>
+          <a href="index.html">Inicio</a>
+        </li>
+
+        <li>
+          <a href="pagina1.html">HTML</a>
+        </li>
+
+        <li>
+          <a href="pagina2.html">Herramientas</a>
+        </li>
+
+        <li>
+          <a href="pagina3.html" aria-current="page">
+            Recursos
+          </a>
+        </li>
       </ul>
     </nav>
   </header>
 
-  <main>
-    <section>
-      <h2>Pagina 2</h2>
-      <p>TODO: contenido aqui.</p>
-      <ul>
-        <li>Item 1</li>
-        <li>Item 2</li>
-        <li>Item 3</li>
-      </ul>
-    </section>
+  <main id="contenido-principal">
+    <article aria-labelledby="titulo-pagina">
+      <h2 id="titulo-pagina">
+        Recursos para aprender desarrollo web
+      </h2>
+
+      <section aria-labelledby="titulo-aprendizaje">
+        <h3 id="titulo-aprendizaje">
+          Aprendizaje constante
+        </h3>
+
+        <p>
+          Para aprender desarrollo web es importante estudiar los conceptos
+          básicos y practicar mediante pequeños proyectos.
+        </p>
+      </section>
+
+      <section aria-labelledby="titulo-plan">
+        <h3 id="titulo-plan">
+          Plan de aprendizaje
+        </h3>
+
+        <table>
+          <caption>
+            Temas básicos de desarrollo web
+          </caption>
+
+          <thead>
+            <tr>
+              <th scope="col">Tema</th>
+              <th scope="col">Descripción</th>
+              <th scope="col">Nivel</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>HTML</td>
+              <td>Organiza la estructura y el contenido de la página.</td>
+              <td>Básico</td>
+            </tr>
+
+            <tr>
+              <td>CSS</td>
+              <td>Controla el diseño y la presentación visual.</td>
+              <td>Básico</td>
+            </tr>
+
+            <tr>
+              <td>JavaScript</td>
+              <td>Agrega funciones e interactividad al sitio.</td>
+              <td>Intermedio</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section aria-labelledby="titulo-recomendaciones">
+        <h3 id="titulo-recomendaciones">
+          Recomendaciones
+        </h3>
+
+        <ul>
+          <li>Practicar escribiendo código todos los días.</li>
+          <li>Revisar la estructura de cada documento HTML.</li>
+          <li>Probar las páginas en diferentes navegadores.</li>
+          <li>Guardar los cambios utilizando Git y GitHub.</li>
+        </ul>
+      </section>
+    </article>
+
+    <aside aria-labelledby="titulo-informacion">
+      <h2 id="titulo-informacion">
+        Información adicional
+      </h2>
+
+      <p>
+        La práctica constante ayuda a comprender mejor cada herramienta
+        utilizada en el desarrollo web.
+      </p>
+    </aside>
   </main>
 
   <footer>
-    <p>&copy; 2026 Mi Sitio</p>
+    <p>
+      &copy; 2026 Mi Sitio — Universidad Mariano Gálvez
+    </p>
   </footer>
 </body>
 </html>

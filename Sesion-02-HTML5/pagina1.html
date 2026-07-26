@@ -3,31 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Sitio — Pagina 1</title>
+
+  <meta
+    name="description"
+    content="Información básica sobre HTML y su estructura semántica"
+  >
+
+  <meta name="author" content="Fredy Cardona">
+
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%BB%3C/text%3E%3C/svg%3E"
+  >
+
+  <title>Mi Sitio — Página 1</title>
 </head>
+
 <body>
+  <a href="#contenido-principal">
+    Saltar al contenido principal
+  </a>
+
   <header>
-    <h1>Mi Sitio</h1>
-    <nav>
+    <h1>Mi Sitio de Desarrollo Web</h1>
+
+    <nav aria-label="Navegación principal">
       <ul>
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="pagina1.html">Pagina 1</a></li>
-        <li><a href="pagina2.html">Pagina 2</a></li>
-        <li><a href="pagina3.html">Pagina 3</a></li>
-        <li><a href="https://google.com" target="_blank" rel="noopener noreferrer">Google</a></li>
+        <li>
+          <a href="index.html">Inicio</a>
+        </li>
+
+        <li>
+          <a href="pagina1.html" aria-current="page">Página 1</a>
+        </li>
+
+        <li>
+          <a href="pagina2.html">Página 2</a>
+        </li>
+
+        <li>
+          <a href="pagina3.html">Página 3</a>
+        </li>
+
+        <li>
+          <a
+            href="https://google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Google
+          </a>
+        </li>
       </ul>
     </nav>
   </header>
 
-  <main>
-    <section>
-      <h2>Seccion de la pagina 1</h2>
-      <p>TODO: contenido aqui.</p>
-    </section>
+  <main id="contenido-principal">
+    <article aria-labelledby="titulo-pagina">
+      <h2 id="titulo-pagina">Conceptos básicos de HTML</h2>
+
+      <section aria-labelledby="titulo-definicion">
+        <h3 id="titulo-definicion">¿Qué es HTML?</h3>
+
+        <p>
+          HTML es un lenguaje de marcado utilizado para organizar y dar
+          significado al contenido de las páginas web.
+        </p>
+      </section>
+
+      <section aria-labelledby="titulo-estructura">
+        <h3 id="titulo-estructura">
+          Estructura básica de un documento HTML
+        </h3>
+
+        <ol>
+          <li>Declaración del tipo de documento.</li>
+          <li>Elemento principal HTML.</li>
+          <li>Encabezado del documento.</li>
+          <li>Contenido visible dentro del cuerpo.</li>
+        </ol>
+      </section>
+    </article>
   </main>
 
   <footer>
-    <p>&copy; 2026 Mi Sitio</p>
+    <p>
+      &copy; 2026 Mi Sitio — Universidad Mariano Gálvez
+    </p>
   </footer>
 </body>
 </html>

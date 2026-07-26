@@ -3,44 +3,188 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mini-sitio sobre desarrollo web">
+
+  <meta
+    name="description"
+    content="Mini-sitio accesible sobre desarrollo web, HTML y herramientas"
+  >
+
   <meta name="author" content="Fredy Cardona">
+
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%BB%3C/text%3E%3C/svg%3E"
+  >
+
   <title>Mi Sitio — Inicio</title>
 </head>
 
 <body>
+  <a href="#contenido-principal">
+    Saltar al contenido principal
+  </a>
+
   <header>
     <h1>Mi Sitio de Desarrollo Web</h1>
 
     <nav aria-label="Navegación principal">
-      <a href="index.html">Inicio</a>
+      <a href="index.html" aria-current="page">Inicio</a>
       <a href="pagina1.html">HTML</a>
       <a href="pagina2.html">Herramientas</a>
       <a href="pagina3.html">Recursos</a>
     </nav>
   </header>
 
-  <main>
-    <article>
-      <h2>Bienvenido</h2>
+  <main id="contenido-principal">
+    <article aria-labelledby="titulo-bienvenida">
+      <h2 id="titulo-bienvenida">Bienvenido</h2>
 
-      <section>
-        <h3>Objetivo del sitio</h3>
+      <section aria-labelledby="titulo-objetivo">
+        <h3 id="titulo-objetivo">Objetivo del sitio</h3>
+
         <p>
           Este mini-sitio presenta información básica sobre desarrollo web,
           HTML y algunas herramientas utilizadas para crear páginas web.
         </p>
       </section>
+
+      <section aria-labelledby="titulo-contacto">
+        <h3 id="titulo-contacto">Formulario de contacto</h3>
+
+        <p id="instrucciones-formulario">
+          Todos los campos del formulario son obligatorios.
+        </p>
+
+        <form
+          action="#"
+          method="post"
+          aria-describedby="instrucciones-formulario"
+        >
+          <fieldset>
+            <legend>Datos de contacto</legend>
+
+            <p>
+              <label for="nombre">Nombre completo:</label>
+
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                minlength="3"
+                autocomplete="name"
+                required
+              >
+            </p>
+
+            <p>
+              <label for="correo">Correo electrónico:</label>
+
+              <input
+                type="email"
+                id="correo"
+                name="correo"
+                autocomplete="email"
+                required
+              >
+            </p>
+
+            <p>
+              <label for="mensaje">Mensaje:</label>
+
+              <textarea
+                id="mensaje"
+                name="mensaje"
+                rows="5"
+                minlength="10"
+                maxlength="500"
+                aria-describedby="ayuda-mensaje"
+                required
+              ></textarea>
+            </p>
+
+            <p id="ayuda-mensaje">
+              Escribe un mensaje de entre 10 y 500 caracteres.
+            </p>
+
+            <button type="submit">Enviar mensaje</button>
+          </fieldset>
+        </form>
+      </section>
+
+      <section aria-labelledby="titulo-dialogo">
+        <h3 id="titulo-dialogo">Ventana de bienvenida</h3>
+
+        <button
+          type="button"
+          command="show-modal"
+          commandfor="bienvenida"
+          aria-haspopup="dialog"
+        >
+          Abrir diálogo de bienvenida
+        </button>
+
+        <dialog
+          id="bienvenida"
+          aria-labelledby="titulo-bienvenida-dialogo"
+          aria-describedby="descripcion-bienvenida"
+        >
+          <h3 id="titulo-bienvenida-dialogo">
+            ¡Bienvenido!
+          </h3>
+
+          <p id="descripcion-bienvenida">
+            Gracias por visitar este mini-sitio de desarrollo web.
+          </p>
+
+          <form method="dialog">
+            <button type="submit">
+              Cerrar diálogo
+            </button>
+          </form>
+        </dialog>
+      </section>
+
+      <section aria-labelledby="titulo-ayuda">
+        <h3 id="titulo-ayuda">Ayuda</h3>
+
+        <button
+          type="button"
+          popovertarget="menu-ayuda"
+          aria-label="Mostrar información de ayuda"
+        >
+          Mostrar ayuda
+        </button>
+
+        <div
+          id="menu-ayuda"
+          popover
+          aria-labelledby="titulo-menu-ayuda"
+        >
+          <h4 id="titulo-menu-ayuda">
+            Información de ayuda
+          </h4>
+
+          <p>
+            Utiliza la navegación superior para visitar las diferentes
+            páginas del mini-sitio.
+          </p>
+        </div>
+      </section>
     </article>
 
-    <aside>
-      <h2>Información</h2>
-      <p>Proyecto de la Sesión 2 del curso de Desarrollo Web.</p>
+    <aside aria-labelledby="titulo-informacion">
+      <h2 id="titulo-informacion">Información</h2>
+
+      <p>
+        Proyecto de la Sesión 2 del curso de Desarrollo Web.
+      </p>
     </aside>
   </main>
 
   <footer>
-    <p>&copy; 2026 Mi Sitio — Universidad Mariano Gálvez</p>
+    <p>
+      &copy; 2026 Mi Sitio — Universidad Mariano Gálvez
+    </p>
   </footer>
 </body>
 </html>

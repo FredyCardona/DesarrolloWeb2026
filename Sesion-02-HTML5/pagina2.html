@@ -3,35 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Sitio — Pagina 2</title>
+
+  <meta
+    name="description"
+    content="Herramientas básicas utilizadas para crear y probar páginas web"
+  >
+
+  <meta name="author" content="Fredy Cardona">
+
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%BB%3C/text%3E%3C/svg%3E"
+  >
+
+  <title>Mi Sitio — Herramientas</title>
 </head>
+
 <body>
+  <a href="#contenido-principal">
+    Saltar al contenido principal
+  </a>
+
   <header>
-    <h1>Mi Sitio</h1>
-    <nav>
+    <h1>Mi Sitio de Desarrollo Web</h1>
+
+    <nav aria-label="Navegación principal">
       <ul>
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="pagina1.html">Pagina 1</a></li>
-        <li><a href="pagina2.html">Pagina 2</a></li>
-        <li><a href="pagina3.html">Pagina 3</a></li>
+        <li>
+          <a href="index.html">Inicio</a>
+        </li>
+
+        <li>
+          <a href="pagina1.html">HTML</a>
+        </li>
+
+        <li>
+          <a href="pagina2.html" aria-current="page">
+            Herramientas
+          </a>
+        </li>
+
+        <li>
+          <a href="pagina3.html">Recursos</a>
+        </li>
       </ul>
     </nav>
   </header>
 
-  <main>
-    <section>
-      <h2>Pagina 2</h2>
-      <p>TODO: contenido aqui.</p>
-      <ul>
-        <li>Item 1</li>
-        <li>Item 2</li>
-        <li>Item 3</li>
-      </ul>
-    </section>
+  <main id="contenido-principal">
+    <article aria-labelledby="titulo-pagina">
+      <h2 id="titulo-pagina">
+        Herramientas de desarrollo web
+      </h2>
+
+      <section aria-labelledby="titulo-editor">
+        <h3 id="titulo-editor">Editor de código</h3>
+
+        <p>
+          Un editor de código permite crear y organizar los archivos
+          necesarios para desarrollar un sitio web.
+        </p>
+      </section>
+
+      <figure>
+        <img
+          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMjYwIiB2aWV3Qm94PSIwIDAgNjAwIDI2MCI+CjxyZWN0IHdpZHRoPSI2MDAiIGhlaWdodD0iMjYwIiByeD0iMjQiIGZpbGw9IiNlOGYwZmUiLz4KPHRleHQgeD0iMzAwIiB5PSIxMTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MiIgZmlsbD0iIzFhNzNlOCI+SFRNTDU8L3RleHQ+Cjx0ZXh0IHg9IjMwMCIgeT0iMTY1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiMyMDIxMjQiPk1pbmktc2l0aW8gc2Vtw6FudGljbzwvdGV4dD4KPC9zdmc+"
+          alt="Ilustración de un mini-sitio desarrollado con HTML5"
+          width="600"
+          height="260"
+          loading="lazy"
+        >
+
+        <figcaption>
+          Imagen incorporada directamente en el código mediante base64.
+        </figcaption>
+      </figure>
+
+      <section aria-labelledby="titulo-herramientas">
+        <h3 id="titulo-herramientas">
+          Herramientas utilizadas
+        </h3>
+
+        <ul>
+          <li>Visual Studio Code para editar los archivos.</li>
+          <li>Google Chrome para visualizar las páginas.</li>
+          <li>Git para controlar los cambios del proyecto.</li>
+          <li>GitHub para almacenar el repositorio.</li>
+        </ul>
+      </section>
+    </article>
+
+    <aside aria-labelledby="titulo-informacion">
+      <h2 id="titulo-informacion">
+        Información adicional
+      </h2>
+
+      <p>
+        Estas herramientas facilitan la creación, prueba y publicación
+        de un proyecto web.
+      </p>
+    </aside>
   </main>
 
   <footer>
-    <p>&copy; 2026 Mi Sitio</p>
+    <p>
+      &copy; 2026 Mi Sitio — Universidad Mariano Gálvez
+    </p>
   </footer>
 </body>
 </html>
