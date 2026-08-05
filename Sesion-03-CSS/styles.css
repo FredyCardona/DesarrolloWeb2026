@@ -1,20 +1,47 @@
-/* TODO: Reset y estilos base */
+/* Configuración inicial del proyecto */
 
-/* TODO: Galería de productos */
-/* Desktop (>=1024px): 3 columnas usando CSS Grid */
-/* Mobile (<768px): 1 columna con scroll vertical */
+/* Reset básico */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
-/* TODO: Estilo de cada tarjeta de producto */
-/* - Imagen ocupa el ancho completo de la tarjeta */
-/* - Nombre del producto en negrita */
-/* - Precio destacado */
-/* - Botón "Comprar" estilizado con hover effect */
+html {
+    scroll-behavior: smooth;
+}
 
-/* TODO: To-Do List */
-/* - Lista sin marcadores (list-style: none) */
-/* - Checkbox con label accesible */
-/* - Tareas alternadas con color de fondo (zebra striping) */
+body {
+    margin: 0;
+}
 
-/* TODO: Diseño responsivo */
-/* - Usar @media queries para cambiar entre mobile y desktop */
-/* - La galería debe ser responsiva usando Grid + media queries */
+/* Evita que las imágenes se salgan de su contenedor */
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Los controles utilizan la misma fuente del documento */
+button,
+input {
+    font: inherit;
+}
+
+/*
+    Día 2:
+    - Fuentes
+    - Colores
+    - Tarjetas de productos
+    - Botón Comprar
+
+    Día 3:
+    - CSS Grid responsivo
+    - To-Do List
+    - Media queries
+
+    Día 4:
+    - Hover
+    - Transiciones
+    - Mejoras de accesibilidad
+*/
