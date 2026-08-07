@@ -10,7 +10,7 @@
 
     <meta
         name="description"
-        content="Galería de productos y lista de tareas creada con HTML y CSS"
+        content="Galería responsiva de productos y lista de tareas creada con HTML y CSS"
     >
 
     <meta name="author" content="Fredy Cardona">
@@ -21,15 +21,21 @@
 </head>
 
 <body>
-    <header class="encabezado">
-        <h1>Galería de Productos</h1>
+    <a class="saltar-contenido" href="#contenido-principal">
+        Saltar al contenido principal
+    </a>
 
-        <p>
-            Explora nuestra selección de productos disponibles.
-        </p>
+    <header class="encabezado">
+        <div class="encabezado-contenido">
+            <h1>Galería de Productos</h1>
+
+            <p>
+                Explora nuestra selección de productos tecnológicos.
+            </p>
+        </div>
     </header>
 
-    <main class="container">
+    <main id="contenido-principal" class="container">
         <section
             class="seccion-productos"
             aria-labelledby="titulo-productos"
@@ -38,23 +44,34 @@
                 Productos disponibles
             </h2>
 
+            <p class="descripcion-seccion">
+                Selecciona el producto que mejor se adapte a tus necesidades.
+            </p>
+
             <div class="galeria">
                 <article class="producto">
                     <img
-                        src="https://via.placeholder.com/300x200/e0e0e0/333?text=Laptop"
+                        src="https://via.placeholder.com/600x400/e0e0e0/333?text=Laptop"
                         alt="Computadora portátil para estudio y trabajo"
-                        width="300"
-                        height="200"
+                        width="600"
+                        height="400"
                         loading="lazy"
                     >
 
                     <div class="producto-info">
                         <h3>Laptop para estudiantes</h3>
+
+                        <p class="descripcion-producto">
+                            Equipo portátil para realizar tareas,
+                            investigaciones y proyectos.
+                        </p>
+
                         <p class="precio">Q4,999.99</p>
 
                         <button
                             class="btn-comprar"
                             type="button"
+                            aria-label="Comprar laptop para estudiantes"
                         >
                             Comprar
                         </button>
@@ -63,20 +80,27 @@
 
                 <article class="producto">
                     <img
-                        src="https://via.placeholder.com/300x200/e0e0e0/333?text=Teclado"
+                        src="https://via.placeholder.com/600x400/e0e0e0/333?text=Teclado"
                         alt="Teclado mecánico para computadora"
-                        width="300"
-                        height="200"
+                        width="600"
+                        height="400"
                         loading="lazy"
                     >
 
                     <div class="producto-info">
                         <h3>Teclado mecánico</h3>
+
+                        <p class="descripcion-producto">
+                            Teclado cómodo y resistente para estudiar,
+                            trabajar o jugar.
+                        </p>
+
                         <p class="precio">Q449.99</p>
 
                         <button
                             class="btn-comprar"
                             type="button"
+                            aria-label="Comprar teclado mecánico"
                         >
                             Comprar
                         </button>
@@ -85,20 +109,27 @@
 
                 <article class="producto">
                     <img
-                        src="https://via.placeholder.com/300x200/e0e0e0/333?text=Mouse"
+                        src="https://via.placeholder.com/600x400/e0e0e0/333?text=Mouse"
                         alt="Mouse inalámbrico ergonómico"
-                        width="300"
-                        height="200"
+                        width="600"
+                        height="400"
                         loading="lazy"
                     >
 
                     <div class="producto-info">
                         <h3>Mouse inalámbrico</h3>
+
+                        <p class="descripcion-producto">
+                            Mouse ergonómico con conexión inalámbrica
+                            y diseño compacto.
+                        </p>
+
                         <p class="precio">Q199.99</p>
 
                         <button
                             class="btn-comprar"
                             type="button"
+                            aria-label="Comprar mouse inalámbrico"
                         >
                             Comprar
                         </button>
@@ -107,20 +138,27 @@
 
                 <article class="producto">
                     <img
-                        src="https://via.placeholder.com/300x200/e0e0e0/333?text=Audifonos"
+                        src="https://via.placeholder.com/600x400/e0e0e0/333?text=Audifonos"
                         alt="Audífonos con micrófono integrado"
-                        width="300"
-                        height="200"
+                        width="600"
+                        height="400"
                         loading="lazy"
                     >
 
                     <div class="producto-info">
                         <h3>Audífonos con micrófono</h3>
+
+                        <p class="descripcion-producto">
+                            Audífonos cómodos para clases,
+                            videollamadas y entretenimiento.
+                        </p>
+
                         <p class="precio">Q349.99</p>
 
                         <button
                             class="btn-comprar"
                             type="button"
+                            aria-label="Comprar audífonos con micrófono"
                         >
                             Comprar
                         </button>
@@ -129,20 +167,27 @@
 
                 <article class="producto">
                     <img
-                        src="https://via.placeholder.com/300x200/e0e0e0/333?text=Monitor"
+                        src="https://via.placeholder.com/600x400/e0e0e0/333?text=Monitor"
                         alt="Monitor de 24 pulgadas para computadora"
-                        width="300"
-                        height="200"
+                        width="600"
+                        height="400"
                         loading="lazy"
                     >
 
                     <div class="producto-info">
                         <h3>Monitor de 24 pulgadas</h3>
+
+                        <p class="descripcion-producto">
+                            Pantalla amplia para estudiar,
+                            trabajar y disfrutar contenido multimedia.
+                        </p>
+
                         <p class="precio">Q1,399.99</p>
 
                         <button
                             class="btn-comprar"
                             type="button"
+                            aria-label="Comprar monitor de 24 pulgadas"
                         >
                             Comprar
                         </button>
@@ -151,20 +196,27 @@
 
                 <article class="producto">
                     <img
-                        src="https://via.placeholder.com/300x200/e0e0e0/333?text=Mochila"
+                        src="https://via.placeholder.com/600x400/e0e0e0/333?text=Mochila"
                         alt="Mochila protectora para computadora portátil"
-                        width="300"
-                        height="200"
+                        width="600"
+                        height="400"
                         loading="lazy"
                     >
 
                     <div class="producto-info">
                         <h3>Mochila para laptop</h3>
+
+                        <p class="descripcion-producto">
+                            Mochila con compartimiento acolchado
+                            para transportar una computadora.
+                        </p>
+
                         <p class="precio">Q299.99</p>
 
                         <button
                             class="btn-comprar"
                             type="button"
+                            aria-label="Comprar mochila para laptop"
                         >
                             Comprar
                         </button>
@@ -179,15 +231,23 @@
         >
             <h2 id="titulo-tareas">Lista de tareas</h2>
 
+            <p class="descripcion-seccion">
+                Marca las actividades que ya hayas completado.
+            </p>
+
             <ul class="tareas">
                 <li class="tarea">
                     <input type="checkbox" id="t1">
-                    <label for="t1">Aprender CSS Grid</label>
+                    <label for="t1">
+                        Aprender CSS Grid
+                    </label>
                 </li>
 
                 <li class="tarea">
                     <input type="checkbox" id="t2">
-                    <label for="t2">Practicar Flexbox</label>
+                    <label for="t2">
+                        Practicar Flexbox
+                    </label>
                 </li>
 
                 <li class="tarea">
