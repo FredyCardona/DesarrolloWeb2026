@@ -2,12 +2,11 @@
  * Lista de Tareas — JS Parte 1
  * Universidad Mariano Gálvez de Guatemala · Desarrollo Web
  *
- * Implementa las funciones marcadas con TODO para que los tests pasen.
- * No cambies los nombres exportados ni su firma.
+ * Día 2:
+ * - agregarTarea
+ * - eliminarTarea
+ * - render básico del DOM
  */
-
-// Día 1: configuración inicial del proyecto.
-// Este archivo está enlazado desde index.html como módulo JavaScript.
 
 const STORAGE_KEY = "tareas-dw-s4";
 
@@ -32,56 +31,77 @@ export function generarId() {
 
 /**
  * Agrega una tarea al modelo.
- * Día 2.
+ * @param {string} texto
+ * @returns {{id: string, texto: string, completada: boolean} | null}
  */
 export function agregarTarea(texto) {
-    // TODO: implementar en el día 2
+    const textoLimpio = texto.trim();
+
+    if (textoLimpio === "") {
+        return null;
+    }
+
+    const nuevaTarea = {
+        id: generarId(),
+        texto: textoLimpio,
+        completada: false,
+    };
+
+    tareas.push(nuevaTarea);
+
+    return nuevaTarea;
 }
 
 /**
  * Elimina una tarea por id.
- * Día 2.
+ * @param {string} id
+ * @returns {boolean}
  */
 export function eliminarTarea(id) {
-    // TODO: implementar en el día 2
+    const cantidadAnterior = tareas.length;
+
+    tareas = tareas.filter((tarea) => tarea.id !== id);
+
+    return tareas.length < cantidadAnterior;
 }
 
 /**
- * Marca o desmarca una tarea como completada.
- * Día 3.
+ * Marca o desmarca una tarea.
+ * Se implementará en el Día 3.
  */
 export function toggleTarea(id) {
-    // TODO: implementar en el día 3
+    // TODO: Día 3
+    return false;
 }
 
 /**
  * Filtra las tareas.
- * Día 3.
+ * Se implementará en el Día 3.
  */
 export function filtrarTareas(filtro) {
-    // TODO: implementar en el día 3
+    // TODO: Día 3
+    return tareas;
 }
 
 /**
  * Guarda las tareas en localStorage.
- * Día 4.
+ * Se implementará en el Día 4.
  */
 export function guardar() {
-    // TODO: implementar en el día 4
+    // TODO: Día 4
 }
 
 /**
  * Carga las tareas desde localStorage.
- * Día 4.
+ * Se implementará en el Día 4.
  */
 export function cargar() {
-    // TODO: implementar en el día 4
+    // TODO: Día 4
 }
 
-// =====================================================
-// Renderizado y eventos
-// =====================================================
-
+/**
+ * Renderiza las tareas actuales en el DOM.
+ */
 export function render(filtro = "todas") {
     const lista = document.getElementById("lista-tareas");
     const contador = document.getElementById("contador");
@@ -92,20 +112,86 @@ export function render(filtro = "todas") {
 
     lista.innerHTML = "";
 
-    // El render funcional se completará durante los siguientes días.
+    for (const tarea of tareas) {
+        const li = document.createElement("li");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = tarea.completada;
+        checkbox.dataset.id = tarea.id;
+        checkbox.setAttribute(
+            "aria-label",
+            `Marcar "${tarea.texto}" como hecha`,
+        );
+
+        const span = document.createElement("span");
+        span.className = "texto";
+        span.textContent = tarea.texto;
+
+        const btnEliminar = document.createElement("button");
+        btnEliminar.type = "button";
+        btnEliminar.className = "eliminar";
+        btnEliminar.textContent = "✕";
+        btnEliminar.setAttribute(
+            "aria-label",
+            `Eliminar "${tarea.texto}"`,
+        );
+
+        btnEliminar.addEventListener("click", () => {
+            eliminarTarea(tarea.id);
+            render(filtro);
+        });
+
+        li.append(
+            checkbox,
+            span,
+            btnEliminar,
+        );
+
+        lista.appendChild(li);
+    }
 
     if (contador) {
-        contador.textContent = "0 tareas";
+        const total = tareas.length;
+
+        contador.textContent =
+            `${total} tarea${total === 1 ? "" : "s"}`;
     }
 }
 
 let filtroActual = "todas";
 
+/**
+ * Inicializa los eventos de la página.
+ */
 function init() {
     render(filtroActual);
+
+    const form = document.getElementById("form-tarea");
+
+    if (form) {
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const input = document.getElementById("input-tarea");
+
+            if (!input) {
+                return;
+            }
+
+            const creada = agregarTarea(input.value);
+
+            if (creada) {
+                render(filtroActual);
+
+                input.value = "";
+                input.focus();
+            }
+        });
+    }
 }
 
-// Inicializar solamente cuando existe un DOM.
+// Inicializar únicamente cuando existe el DOM.
 if (
     typeof document !== "undefined" &&
     document.getElementById("lista-tareas")
