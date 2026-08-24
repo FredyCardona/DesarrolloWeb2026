@@ -2,10 +2,13 @@
  * Lista de Tareas — JS Parte 1
  * Universidad Mariano Gálvez de Guatemala · Desarrollo Web
  *
- * Día 2:
+ * Día 3:
  * - agregarTarea
  * - eliminarTarea
- * - render básico del DOM
+ * - toggleTarea
+ * - filtrarTareas
+ * - render del DOM
+ * - conexión de botones de filtro
  */
 
 const STORAGE_KEY = "tareas-dw-s4";
@@ -66,20 +69,42 @@ export function eliminarTarea(id) {
 }
 
 /**
- * Marca o desmarca una tarea.
- * Se implementará en el Día 3.
+ * Marca o desmarca una tarea como completada.
+ * @param {string} id
+ * @returns {boolean}
  */
 export function toggleTarea(id) {
-    // TODO: Día 3
-    return false;
+    const tareaEncontrada = tareas.find(
+        (tarea) => tarea.id === id,
+    );
+
+    if (!tareaEncontrada) {
+        return false;
+    }
+
+    tareaEncontrada.completada = !tareaEncontrada.completada;
+
+    return true;
 }
 
 /**
- * Filtra las tareas.
- * Se implementará en el Día 3.
+ * Devuelve las tareas correspondientes al filtro.
+ * @param {"todas"|"pendientes"|"completadas"} filtro
+ * @returns {Array}
  */
 export function filtrarTareas(filtro) {
-    // TODO: Día 3
+    if (filtro === "pendientes") {
+        return tareas.filter(
+            (tarea) => !tarea.completada,
+        );
+    }
+
+    if (filtro === "completadas") {
+        return tareas.filter(
+            (tarea) => tarea.completada,
+        );
+    }
+
     return tareas;
 }
 
@@ -99,8 +124,15 @@ export function cargar() {
     // TODO: Día 4
 }
 
+// =====================================================
+// Renderizado y eventos
+// =====================================================
+
+let filtroActual = "todas";
+
 /**
- * Renderiza las tareas actuales en el DOM.
+ * Renderiza las tareas en el DOM aplicando el filtro.
+ * @param {"todas"|"pendientes"|"completadas"} filtro
  */
 export function render(filtro = "todas") {
     const lista = document.getElementById("lista-tareas");
@@ -112,26 +144,42 @@ export function render(filtro = "todas") {
 
     lista.innerHTML = "";
 
-    for (const tarea of tareas) {
+    const tareasVisibles = filtrarTareas(filtro);
+
+    for (const tarea of tareasVisibles) {
         const li = document.createElement("li");
 
+        if (tarea.completada) {
+            li.classList.add("completada");
+        }
+
         const checkbox = document.createElement("input");
+
         checkbox.type = "checkbox";
         checkbox.checked = tarea.completada;
         checkbox.dataset.id = tarea.id;
+
         checkbox.setAttribute(
             "aria-label",
             `Marcar "${tarea.texto}" como hecha`,
         );
 
+        checkbox.addEventListener("change", () => {
+            toggleTarea(tarea.id);
+            render(filtroActual);
+        });
+
         const span = document.createElement("span");
+
         span.className = "texto";
         span.textContent = tarea.texto;
 
         const btnEliminar = document.createElement("button");
+
         btnEliminar.type = "button";
         btnEliminar.className = "eliminar";
         btnEliminar.textContent = "✕";
+
         btnEliminar.setAttribute(
             "aria-label",
             `Eliminar "${tarea.texto}"`,
@@ -139,7 +187,7 @@ export function render(filtro = "todas") {
 
         btnEliminar.addEventListener("click", () => {
             eliminarTarea(tarea.id);
-            render(filtro);
+            render(filtroActual);
         });
 
         li.append(
@@ -154,15 +202,17 @@ export function render(filtro = "todas") {
     if (contador) {
         const total = tareas.length;
 
+        const hechas = tareas.filter(
+            (tarea) => tarea.completada,
+        ).length;
+
         contador.textContent =
-            `${total} tarea${total === 1 ? "" : "s"}`;
+            `${total} tarea${total === 1 ? "" : "s"} (${hechas} hechas)`;
     }
 }
 
-let filtroActual = "todas";
-
 /**
- * Inicializa los eventos de la página.
+ * Inicializa los eventos de la aplicación.
  */
 function init() {
     render(filtroActual);
@@ -189,9 +239,26 @@ function init() {
             }
         });
     }
+
+    const botonesFiltro =
+        document.querySelectorAll(".filtro");
+
+    botonesFiltro.forEach((boton) => {
+        boton.addEventListener("click", () => {
+            filtroActual = boton.dataset.filtro;
+
+            botonesFiltro.forEach((otroBoton) => {
+                otroBoton.classList.remove("activo");
+            });
+
+            boton.classList.add("activo");
+
+            render(filtroActual);
+        });
+    });
 }
 
-// Inicializar únicamente cuando existe el DOM.
+// Inicializar únicamente cuando existe un DOM.
 if (
     typeof document !== "undefined" &&
     document.getElementById("lista-tareas")
