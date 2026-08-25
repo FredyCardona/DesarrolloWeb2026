@@ -2,13 +2,13 @@
  * Lista de Tareas — JS Parte 1
  * Universidad Mariano Gálvez de Guatemala · Desarrollo Web
  *
- * Día 3:
- * - agregarTarea
- * - eliminarTarea
- * - toggleTarea
- * - filtrarTareas
- * - render del DOM
- * - conexión de botones de filtro
+ * Funciones:
+ * - Agregar tareas
+ * - Eliminar tareas
+ * - Completar tareas
+ * - Filtrar tareas
+ * - Guardar en localStorage
+ * - Cargar desde localStorage
  */
 
 const STORAGE_KEY = "tareas-dw-s4";
@@ -63,7 +63,9 @@ export function agregarTarea(texto) {
 export function eliminarTarea(id) {
     const cantidadAnterior = tareas.length;
 
-    tareas = tareas.filter((tarea) => tarea.id !== id);
+    tareas = tareas.filter(
+        (tarea) => tarea.id !== id,
+    );
 
     return tareas.length < cantidadAnterior;
 }
@@ -82,13 +84,14 @@ export function toggleTarea(id) {
         return false;
     }
 
-    tareaEncontrada.completada = !tareaEncontrada.completada;
+    tareaEncontrada.completada =
+        !tareaEncontrada.completada;
 
     return true;
 }
 
 /**
- * Devuelve las tareas correspondientes al filtro.
+ * Filtra las tareas según su estado.
  * @param {"todas"|"pendientes"|"completadas"} filtro
  * @returns {Array}
  */
@@ -109,19 +112,40 @@ export function filtrarTareas(filtro) {
 }
 
 /**
- * Guarda las tareas en localStorage.
- * Se implementará en el Día 4.
+ * Guarda el array de tareas en localStorage.
  */
 export function guardar() {
-    // TODO: Día 4
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(tareas),
+    );
 }
 
 /**
- * Carga las tareas desde localStorage.
- * Se implementará en el Día 4.
+ * Carga las tareas almacenadas en localStorage.
+ * Si no existen datos o hay un error,
+ * se utiliza un arreglo vacío.
  */
 export function cargar() {
-    // TODO: Día 4
+    try {
+        const datosGuardados =
+            localStorage.getItem(STORAGE_KEY);
+
+        if (!datosGuardados) {
+            tareas = [];
+            return;
+        }
+
+        const datos = JSON.parse(datosGuardados);
+
+        if (Array.isArray(datos)) {
+            tareas = datos;
+        } else {
+            tareas = [];
+        }
+    } catch (error) {
+        tareas = [];
+    }
 }
 
 // =====================================================
@@ -131,12 +155,15 @@ export function cargar() {
 let filtroActual = "todas";
 
 /**
- * Renderiza las tareas en el DOM aplicando el filtro.
+ * Renderiza las tareas en el DOM.
  * @param {"todas"|"pendientes"|"completadas"} filtro
  */
 export function render(filtro = "todas") {
-    const lista = document.getElementById("lista-tareas");
-    const contador = document.getElementById("contador");
+    const lista =
+        document.getElementById("lista-tareas");
+
+    const contador =
+        document.getElementById("contador");
 
     if (!lista) {
         return;
@@ -144,16 +171,19 @@ export function render(filtro = "todas") {
 
     lista.innerHTML = "";
 
-    const tareasVisibles = filtrarTareas(filtro);
+    const tareasVisibles =
+        filtrarTareas(filtro);
 
     for (const tarea of tareasVisibles) {
-        const li = document.createElement("li");
+        const li =
+            document.createElement("li");
 
         if (tarea.completada) {
             li.classList.add("completada");
         }
 
-        const checkbox = document.createElement("input");
+        const checkbox =
+            document.createElement("input");
 
         checkbox.type = "checkbox";
         checkbox.checked = tarea.completada;
@@ -164,17 +194,25 @@ export function render(filtro = "todas") {
             `Marcar "${tarea.texto}" como hecha`,
         );
 
-        checkbox.addEventListener("change", () => {
-            toggleTarea(tarea.id);
-            render(filtroActual);
-        });
+        checkbox.addEventListener(
+            "change",
+            () => {
+                toggleTarea(tarea.id);
 
-        const span = document.createElement("span");
+                guardar();
+
+                render(filtroActual);
+            },
+        );
+
+        const span =
+            document.createElement("span");
 
         span.className = "texto";
         span.textContent = tarea.texto;
 
-        const btnEliminar = document.createElement("button");
+        const btnEliminar =
+            document.createElement("button");
 
         btnEliminar.type = "button";
         btnEliminar.className = "eliminar";
@@ -185,10 +223,16 @@ export function render(filtro = "todas") {
             `Eliminar "${tarea.texto}"`,
         );
 
-        btnEliminar.addEventListener("click", () => {
-            eliminarTarea(tarea.id);
-            render(filtroActual);
-        });
+        btnEliminar.addEventListener(
+            "click",
+            () => {
+                eliminarTarea(tarea.id);
+
+                guardar();
+
+                render(filtroActual);
+            },
+        );
 
         li.append(
             checkbox,
@@ -212,49 +256,63 @@ export function render(filtro = "todas") {
 }
 
 /**
- * Inicializa los eventos de la aplicación.
+ * Inicializa la aplicación.
  */
 function init() {
+    cargar();
+
     render(filtroActual);
 
-    const form = document.getElementById("form-tarea");
+    const form =
+        document.getElementById("form-tarea");
 
-    if (form) {
-        form.addEventListener("submit", (event) => {
-            event.preventDefault();
+    const input =
+        document.getElementById("input-tarea");
 
-            const input = document.getElementById("input-tarea");
+    if (form && input) {
+        form.addEventListener(
+            "submit",
+            (event) => {
+                event.preventDefault();
 
-            if (!input) {
-                return;
-            }
+                const creada =
+                    agregarTarea(input.value);
 
-            const creada = agregarTarea(input.value);
+                if (creada) {
+                    guardar();
 
-            if (creada) {
-                render(filtroActual);
+                    render(filtroActual);
 
-                input.value = "";
-                input.focus();
-            }
-        });
+                    input.value = "";
+                    input.focus();
+                }
+            },
+        );
     }
 
     const botonesFiltro =
         document.querySelectorAll(".filtro");
 
     botonesFiltro.forEach((boton) => {
-        boton.addEventListener("click", () => {
-            filtroActual = boton.dataset.filtro;
+        boton.addEventListener(
+            "click",
+            () => {
+                filtroActual =
+                    boton.dataset.filtro;
 
-            botonesFiltro.forEach((otroBoton) => {
-                otroBoton.classList.remove("activo");
-            });
+                botonesFiltro.forEach(
+                    (otroBoton) => {
+                        otroBoton.classList.remove(
+                            "activo",
+                        );
+                    },
+                );
 
-            boton.classList.add("activo");
+                boton.classList.add("activo");
 
-            render(filtroActual);
-        });
+                render(filtroActual);
+            },
+        );
     });
 }
 
@@ -263,5 +321,8 @@ if (
     typeof document !== "undefined" &&
     document.getElementById("lista-tareas")
 ) {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener(
+        "DOMContentLoaded",
+        init,
+    );
 }
