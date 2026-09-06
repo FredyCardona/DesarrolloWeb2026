@@ -21,7 +21,7 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 
 // =====================================================
-// Utilidades (ya implementadas — no las modifiques)
+// Utilidades
 // =====================================================
 
 /**
@@ -55,13 +55,10 @@ function leerBody(req) {
 
 // =====================================================
 // Día 2
-// process.argv, variables de entorno y módulo os
 // =====================================================
 
 /**
- * Parsea los argumentos de la línea de comandos (process.argv).
- * Acepta: --nombre <valor> y --puerto <valor>.
- * Valores por defecto: nombre = "invitado", puerto = 3000.
+ * Parsea los argumentos de la línea de comandos.
  *
  * @param {string[]} argv
  * @returns {{ nombre: string, puerto: number }}
@@ -99,13 +96,7 @@ export function parsearArgumentos(argv) {
 }
 
 /**
- * Construye la configuración de la app a partir
- * de variables de entorno.
- *
- * Lee:
- * - PORT
- * - NOMBRE_APP
- * - ARCHIVO_DATOS
+ * Obtiene la configuración desde variables de entorno.
  *
  * @param {NodeJS.ProcessEnv} env
  * @returns {{
@@ -139,7 +130,7 @@ export function obtenerConfig(env) {
 }
 
 /**
- * Devuelve información del sistema usando el módulo os.
+ * Devuelve información del sistema.
  *
  * @returns {{
  *   plataforma: string,
@@ -151,22 +142,17 @@ export function obtenerConfig(env) {
 export function infoSistema() {
     return {
         plataforma: os.platform(),
-
-        nucleos:
-            os.cpus().length,
-
-        memoriaLibreMB:
-            Math.round(
-                os.freemem() / 1024 / 1024,
-            ),
-
-        hostname:
-            os.hostname(),
+        nucleos: os.cpus().length,
+        memoriaLibreMB: Math.round(
+            os.freemem() / 1024 / 1024,
+        ),
+        hostname: os.hostname(),
     };
 }
 
 // =====================================================
-// Día 3 — todavía pendiente
+// Día 3
+// EventEmitter y fs/promises
 // =====================================================
 
 /**
@@ -178,13 +164,30 @@ export function infoSistema() {
  * }}
  */
 export function crearLogger() {
-    throw new Error(
-        'Not implemented: crearLogger',
-    );
+    const emitter = new EventEmitter();
+
+    function registrar(mensaje) {
+        const fecha = new Date().toISOString();
+        const linea = `[${fecha}] ${mensaje}`;
+
+        emitter.emit('registro', linea);
+    }
+
+    function onRegistro(fn) {
+        emitter.on('registro', fn);
+    }
+
+    return {
+        registrar,
+        onRegistro,
+    };
 }
 
 /**
- * Lee el arreglo de mensajes desde un archivo JSON.
+ * Lee los mensajes desde un archivo JSON.
+ *
+ * Si no existe el archivo devuelve [].
+ * Si el contenido no es un arreglo devuelve [].
  *
  * @param {string} archivoDatos
  * @returns {Promise<Array<{
@@ -196,13 +199,35 @@ export function crearLogger() {
 export async function leerMensajes(
     archivoDatos,
 ) {
-    throw new Error(
-        'Not implemented: leerMensajes',
-    );
+    try {
+        const contenido = await fs.readFile(
+            archivoDatos,
+            'utf8',
+        );
+
+        const datos = JSON.parse(contenido);
+
+        if (!Array.isArray(datos)) {
+            return [];
+        }
+
+        return datos;
+    } catch (error) {
+        if (
+            error.code === 'ENOENT' ||
+            error instanceof SyntaxError
+        ) {
+            return [];
+        }
+
+        throw error;
+    }
 }
 
 /**
- * Agrega un mensaje al archivo y lo devuelve.
+ * Agrega un mensaje al archivo JSON.
+ *
+ * Si el texto está vacío devuelve null.
  *
  * @param {string} archivoDatos
  * @param {string} texto
@@ -216,22 +241,49 @@ export async function agregarMensaje(
     archivoDatos,
     texto,
 ) {
-    throw new Error(
-        'Not implemented: agregarMensaje',
+    if (
+        typeof texto !== 'string' ||
+        texto.trim() === ''
+    ) {
+        return null;
+    }
+
+    const mensajes =
+        await leerMensajes(archivoDatos);
+
+    const nuevoMensaje = {
+        id: generarId(),
+        texto: texto.trim(),
+        fecha: new Date().toISOString(),
+    };
+
+    mensajes.push(nuevoMensaje);
+
+    const directorio =
+        path.dirname(archivoDatos);
+
+    await fs.mkdir(
+        directorio,
+        {
+            recursive: true,
+        },
     );
+
+    await fs.writeFile(
+        archivoDatos,
+        JSON.stringify(mensajes, null, 2),
+        'utf8',
+    );
+
+    return nuevoMensaje;
 }
 
 // =====================================================
-// Día 4 — todavía pendiente
+// Día 4 — pendiente
 // =====================================================
 
 /**
  * Crea un servidor HTTP sin escuchar todavía.
- *
- * Rutas:
- *   GET  /
- *   GET  /mensajes
- *   POST /mensajes
  *
  * @param {{
  *   archivoDatos?: string,
