@@ -53,12 +53,34 @@ function leerBody(req) {
     });
 }
 
+/**
+ * Envía una respuesta en formato JSON.
+ * @param {import('node:http').ServerResponse} res
+ * @param {number} statusCode
+ * @param {unknown} data
+ */
+function responderJson(res, statusCode, data) {
+    res.statusCode = statusCode;
+
+    res.setHeader(
+        'Content-Type',
+        'application/json; charset=utf-8',
+    );
+
+    res.end(JSON.stringify(data));
+}
+
 // =====================================================
 // Día 2
+// Argumentos, configuración y sistema
 // =====================================================
 
 /**
  * Parsea los argumentos de la línea de comandos.
+ *
+ * Acepta:
+ * --nombre <valor>
+ * --puerto <valor>
  *
  * @param {string[]} argv
  * @returns {{ nombre: string, puerto: number }}
@@ -72,7 +94,10 @@ export function parsearArgumentos(argv) {
     for (let i = 2; i < argv.length; i += 1) {
         const argumento = argv[i];
 
-        if (argumento === '--nombre' && argv[i + 1]) {
+        if (
+            argumento === '--nombre' &&
+            argv[i + 1]
+        ) {
             resultado.nombre = argv[i + 1];
             i += 1;
         } else if (
@@ -119,6 +144,7 @@ export function obtenerConfig(env) {
 
     return {
         puerto,
+
         nombreApp:
             variables.NOMBRE_APP ||
             'mensajes-api',
@@ -130,7 +156,8 @@ export function obtenerConfig(env) {
 }
 
 /**
- * Devuelve información del sistema.
+ * Devuelve información del sistema usando
+ * el módulo os.
  *
  * @returns {{
  *   plataforma: string,
@@ -142,11 +169,17 @@ export function obtenerConfig(env) {
 export function infoSistema() {
     return {
         plataforma: os.platform(),
-        nucleos: os.cpus().length,
-        memoriaLibreMB: Math.round(
-            os.freemem() / 1024 / 1024,
-        ),
-        hostname: os.hostname(),
+
+        nucleos:
+            os.cpus().length,
+
+        memoriaLibreMB:
+            Math.round(
+                os.freemem() / 1024 / 1024,
+            ),
+
+        hostname:
+            os.hostname(),
     };
 }
 
@@ -167,14 +200,23 @@ export function crearLogger() {
     const emitter = new EventEmitter();
 
     function registrar(mensaje) {
-        const fecha = new Date().toISOString();
-        const linea = `[${fecha}] ${mensaje}`;
+        const fecha =
+            new Date().toISOString();
 
-        emitter.emit('registro', linea);
+        const linea =
+            `[${fecha}] ${mensaje}`;
+
+        emitter.emit(
+            'registro',
+            linea,
+        );
     }
 
     function onRegistro(fn) {
-        emitter.on('registro', fn);
+        emitter.on(
+            'registro',
+            fn,
+        );
     }
 
     return {
@@ -186,7 +228,7 @@ export function crearLogger() {
 /**
  * Lee los mensajes desde un archivo JSON.
  *
- * Si no existe el archivo devuelve [].
+ * Si el archivo no existe devuelve [].
  * Si el contenido no es un arreglo devuelve [].
  *
  * @param {string} archivoDatos
@@ -200,12 +242,14 @@ export async function leerMensajes(
     archivoDatos,
 ) {
     try {
-        const contenido = await fs.readFile(
-            archivoDatos,
-            'utf8',
-        );
+        const contenido =
+            await fs.readFile(
+                archivoDatos,
+                'utf8',
+            );
 
-        const datos = JSON.parse(contenido);
+        const datos =
+            JSON.parse(contenido);
 
         if (!Array.isArray(datos)) {
             return [];
@@ -249,18 +293,28 @@ export async function agregarMensaje(
     }
 
     const mensajes =
-        await leerMensajes(archivoDatos);
+        await leerMensajes(
+            archivoDatos,
+        );
 
     const nuevoMensaje = {
         id: generarId(),
-        texto: texto.trim(),
-        fecha: new Date().toISOString(),
+
+        texto:
+            texto.trim(),
+
+        fecha:
+            new Date().toISOString(),
     };
 
-    mensajes.push(nuevoMensaje);
+    mensajes.push(
+        nuevoMensaje,
+    );
 
     const directorio =
-        path.dirname(archivoDatos);
+        path.dirname(
+            archivoDatos,
+        );
 
     await fs.mkdir(
         directorio,
@@ -271,7 +325,11 @@ export async function agregarMensaje(
 
     await fs.writeFile(
         archivoDatos,
-        JSON.stringify(mensajes, null, 2),
+        JSON.stringify(
+            mensajes,
+            null,
+            2,
+        ),
         'utf8',
     );
 
@@ -279,11 +337,17 @@ export async function agregarMensaje(
 }
 
 // =====================================================
-// Día 4 — pendiente
+// Día 4
+// Servidor HTTP
 // =====================================================
 
 /**
  * Crea un servidor HTTP sin escuchar todavía.
+ *
+ * Rutas:
+ * GET  /           → información de la aplicación
+ * GET  /mensajes   → lista de mensajes
+ * POST /mensajes   → crea un mensaje
  *
  * @param {{
  *   archivoDatos?: string,
@@ -293,14 +357,179 @@ export async function agregarMensaje(
  *
  * @returns {import('node:http').Server}
  */
-export function crearServidor(config = {}) {
-    throw new Error(
-        'Not implemented: crearServidor',
-    );
+export function crearServidor(
+    config = {},
+) {
+    const archivoDatos =
+        config.archivoDatos ||
+        'data/mensajes.json';
+
+    const nombreApp =
+        config.nombreApp ||
+        'mensajes-api';
+
+    const logger =
+        config.logger ||
+        crearLogger();
+
+    const servidor =
+        http.createServer(
+            async (req, res) => {
+                const metodo =
+                    req.method || 'GET';
+
+                const url =
+                    new URL(
+                        req.url || '/',
+                        'http://localhost',
+                    );
+
+                const ruta =
+                    url.pathname;
+
+                logger.registrar(
+                    `${metodo} ${ruta}`,
+                );
+
+                try {
+                    // ==========================
+                    // GET /
+                    // ==========================
+                    if (
+                        metodo === 'GET' &&
+                        ruta === '/'
+                    ) {
+                        responderJson(
+                            res,
+                            200,
+                            {
+                                mensaje:
+                                    `Bienvenido a ${nombreApp}`,
+
+                                hora:
+                                    new Date().toISOString(),
+
+                                sistema:
+                                    infoSistema(),
+                            },
+                        );
+
+                        return;
+                    }
+
+                    // ==========================
+                    // GET /mensajes
+                    // ==========================
+                    if (
+                        metodo === 'GET' &&
+                        ruta === '/mensajes'
+                    ) {
+                        const mensajes =
+                            await leerMensajes(
+                                archivoDatos,
+                            );
+
+                        responderJson(
+                            res,
+                            200,
+                            mensajes,
+                        );
+
+                        return;
+                    }
+
+                    // ==========================
+                    // POST /mensajes
+                    // ==========================
+                    if (
+                        metodo === 'POST' &&
+                        ruta === '/mensajes'
+                    ) {
+                        const body =
+                            await leerBody(
+                                req,
+                            );
+
+                        let datos;
+
+                        try {
+                            datos =
+                                JSON.parse(
+                                    body || '{}',
+                                );
+                        } catch {
+                            responderJson(
+                                res,
+                                400,
+                                {
+                                    error:
+                                        'JSON inválido',
+                                },
+                            );
+
+                            return;
+                        }
+
+                        const nuevoMensaje =
+                            await agregarMensaje(
+                                archivoDatos,
+                                datos.texto,
+                            );
+
+                        if (!nuevoMensaje) {
+                            responderJson(
+                                res,
+                                400,
+                                {
+                                    error:
+                                        'El campo texto es requerido',
+                                },
+                            );
+
+                            return;
+                        }
+
+                        responderJson(
+                            res,
+                            201,
+                            nuevoMensaje,
+                        );
+
+                        return;
+                    }
+
+                    // ==========================
+                    // Ruta no encontrada
+                    // ==========================
+                    responderJson(
+                        res,
+                        404,
+                        {
+                            error:
+                                'Ruta no encontrada',
+                        },
+                    );
+                } catch {
+                    responderJson(
+                        res,
+                        500,
+                        {
+                            error:
+                                'Error interno del servidor',
+                        },
+                    );
+                }
+            },
+        );
+
+    return servidor;
 }
 
 /**
- * Crea y arranca el servidor.
+ * Crea y arranca el servidor en el puerto indicado.
+ *
+ * Al arrancar registra:
+ * "Servidor en http://localhost:<puerto>"
  *
  * @param {{
  *   puerto?: number,
@@ -314,7 +543,28 @@ export function crearServidor(config = {}) {
 export function iniciarServidor(
     config = {},
 ) {
-    throw new Error(
-        'Not implemented: iniciarServidor',
+    const puerto =
+        config.puerto ||
+        3000;
+
+    const logger =
+        config.logger ||
+        crearLogger();
+
+    const servidor =
+        crearServidor({
+            ...config,
+            logger,
+        });
+
+    servidor.listen(
+        puerto,
+        () => {
+            logger.registrar(
+                `Servidor en http://localhost:${puerto}`,
+            );
+        },
     );
+
+    return servidor;
 }
