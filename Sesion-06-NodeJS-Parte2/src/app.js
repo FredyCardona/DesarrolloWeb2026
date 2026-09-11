@@ -36,12 +36,10 @@ export function generarId() {
 }
 
 // =====================================================
-// TODO: implementa las siguientes funciones
+// Componentes y módulos
 // =====================================================
 
 /**
- * Componentes y módulos.
- *
  * TODO 1: crea un módulo `src/math.js` (named exports) con:
  *   - const PI = 3.14159
  *   - function sumar(a, b)
@@ -54,11 +52,13 @@ export function generarId() {
  * TODO 3: en `src/index.js` re-exporta (barrel exports) todo lo anterior:
  *   export { PI, sumar, restar } from "./math.js";
  *   export { default as logger } from "./logger.js";
- *   export { ... } from "./app.js";   // las funciones públicas
- *
- * Cuando termines, corre el test "Estructura de módulos"
- * para verificar que los re-exports funcionan.
+ *   export { ... } from "./app.js";
  */
+
+// =====================================================
+// Día 3 — pendiente
+// Streams y pipeline
+// =====================================================
 
 /**
  * Filtra las líneas de un archivo de log que contienen un texto y
@@ -78,8 +78,9 @@ export async function filtrarLogs(origen, destino, texto) {
 
 /**
  * Lee un archivo de texto y devuelve las líneas como arreglo,
- * sin líneas vacías. NO uses readFile: debes usar un Readable + recolección
- * (puedes leer con `createReadStream` y acumular por chunks).
+ * sin líneas vacías.
+ *
+ * NO uses readFile: debes usar un Readable + recolección.
  *
  * @param {string} ruta
  * @returns {Promise<string[]>}
@@ -88,25 +89,74 @@ export async function leerLineas(ruta) {
     throw new Error('Not implemented: leerLineas');
 }
 
+// =====================================================
+// Día 2
+// import.meta.url, rutas y configuración .env
+// =====================================================
+
 /**
- * Devuelve una ruta absoluta a partir de una ruta relativa al proyecto.
- * Usa el __dirname que definimos arriba + join.
+ * Devuelve una ruta absoluta a partir de una ruta relativa.
+ * Usa el __dirname definido arriba junto con join().
  *
  * @param {string} rutaRelativa
  * @returns {string}
  */
 export function rutaAbsoluta(rutaRelativa) {
-    throw new Error('Not implemented: rutaAbsoluta');
+    return join(__dirname, rutaRelativa);
 }
 
 /**
- * Parsea el contenido de un archivo de configuración ".env" (simple).
- * Formato por línea: CLAVE=VALOR  (ignora líneas vacías y las que empiezan con #).
- * Devuelve un objeto con las claves en mayúsculas.
+ * Parsea el contenido de un archivo de configuración ".env".
+ *
+ * Formato:
+ * CLAVE=VALOR
+ *
+ * Ignora:
+ * - líneas vacías
+ * - comentarios que empiezan con #
+ *
+ * Las claves se devuelven en mayúsculas.
  *
  * @param {string} contenido
  * @returns {Record<string, string>}
  */
 export function parsearEnv(contenido) {
-    throw new Error('Not implemented: parsearEnv');
+    const resultado = {};
+
+    const lineas = contenido.split(/\r?\n/);
+
+    for (const linea of lineas) {
+        const lineaLimpia = linea.trim();
+
+        if (
+            lineaLimpia === '' ||
+            lineaLimpia.startsWith('#')
+        ) {
+            continue;
+        }
+
+        const posicionIgual =
+            lineaLimpia.indexOf('=');
+
+        if (posicionIgual === -1) {
+            continue;
+        }
+
+        const clave =
+            lineaLimpia
+                .slice(0, posicionIgual)
+                .trim()
+                .toUpperCase();
+
+        const valor =
+            lineaLimpia
+                .slice(posicionIgual + 1)
+                .trim();
+
+        if (clave !== '') {
+            resultado[clave] = valor;
+        }
+    }
+
+    return resultado;
 }
