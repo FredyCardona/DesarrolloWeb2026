@@ -15,7 +15,7 @@
 
 import { createReadStream, createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
-import { Readable } from 'node:stream';
+import { Transform } from 'node:stream';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -36,27 +36,7 @@ export function generarId() {
 }
 
 // =====================================================
-// Componentes y módulos
-// =====================================================
-
-/**
- * TODO 1: crea un módulo `src/math.js` (named exports) con:
- *   - const PI = 3.14159
- *   - function sumar(a, b)
- *   - function restar(a, b)
- *
- * TODO 2: crea un módulo `src/logger.js` (default export) con:
- *   - default function registrarProceso(msg) → string con formato
- *     `[fecha ISO] msg` (solo devuelve el string, no lo imprime)
- *
- * TODO 3: en `src/index.js` re-exporta (barrel exports) todo lo anterior:
- *   export { PI, sumar, restar } from "./math.js";
- *   export { default as logger } from "./logger.js";
- *   export { ... } from "./app.js";
- */
-
-// =====================================================
-// Día 3 — pendiente
+// Día 3
 // Streams y pipeline
 // =====================================================
 
@@ -64,29 +44,85 @@ export function generarId() {
  * Filtra las líneas de un archivo de log que contienen un texto y
  * escribe el resultado en otro archivo, usando Streams + pipeline.
  *
- * IMPORTANTE: usa `import { createReadStream, createWriteStream } from 'node:fs'`
- * y `pipeline` de 'node:stream/promises' (ya importados arriba).
- *
- * @param {string} origen  - Ruta del archivo de entrada.
- * @param {string} destino - Ruta del archivo de salida.
- * @param {string} texto   - Texto que deben contener las líneas.
- * @returns {Promise<number>} cantidad de líneas que coincidieron (0 si no hay).
+ * @param {string} origen
+ * @param {string} destino
+ * @param {string} texto
+ * @returns {Promise<number>}
  */
 export async function filtrarLogs(origen, destino, texto) {
-    throw new Error('Not implemented: filtrarLogs');
+    let coincidencias = 0;
+    let buffer = '';
+
+    const filtro = new Transform({
+        transform(chunk, encoding, callback) {
+            buffer += chunk.toString();
+
+            const lineas = buffer.split(/\r?\n/);
+            buffer = lineas.pop() ?? '';
+
+            for (const linea of lineas) {
+                if (linea.includes(texto)) {
+                    coincidencias += 1;
+                    this.push(`${linea}\n`);
+                }
+            }
+
+            callback();
+        },
+
+        flush(callback) {
+            if (
+                buffer !== '' &&
+                buffer.includes(texto)
+            ) {
+                coincidencias += 1;
+                this.push(`${buffer}\n`);
+            }
+
+            callback();
+        },
+    });
+
+    await pipeline(
+        createReadStream(origen, {
+            encoding: 'utf8',
+        }),
+        filtro,
+        createWriteStream(destino, {
+            encoding: 'utf8',
+        }),
+    );
+
+    return coincidencias;
 }
 
 /**
- * Lee un archivo de texto y devuelve las líneas como arreglo,
- * sin líneas vacías.
- *
- * NO uses readFile: debes usar un Readable + recolección.
+ * Lee un archivo de texto y devuelve sus líneas
+ * como arreglo, ignorando las líneas vacías.
  *
  * @param {string} ruta
  * @returns {Promise<string[]>}
  */
 export async function leerLineas(ruta) {
-    throw new Error('Not implemented: leerLineas');
+    const stream = createReadStream(
+        ruta,
+        {
+            encoding: 'utf8',
+        },
+    );
+
+    let contenido = '';
+
+    for await (const chunk of stream) {
+        contenido += chunk;
+    }
+
+    return contenido
+        .split(/\r?\n/)
+        .filter(
+            (linea) =>
+                linea.trim() !== '',
+        );
 }
 
 // =====================================================
