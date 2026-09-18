@@ -6,18 +6,43 @@
  * Esto es el patrón Repository que ya viste en clase: la capa de datos
  * queda aislada de la capa web.
  *
- * TODO: implementa los 5 métodos marcados. No cambies sus nombres ni firmas.
+ * Implementación del repositorio en memoria.
  */
 
 /**
  * Datos iniciales para que la API arranque con información.
- * @typedef {{ id: string, nombre: string, apellido: string, email: string, edad: number }} Alumno
+ * @typedef {{
+ *   id: string,
+ *   nombre: string,
+ *   apellido: string,
+ *   email: string,
+ *   edad: number
+ * }} Alumno
+ *
  * @type {Alumno[]}
  */
 export const datosSemilla = [
-    { id: 'a-1', nombre: 'Ana',    apellido: 'López',   email: 'ana.lopez@umg.edu.gt',    edad: 20 },
-    { id: 'a-2', nombre: 'Luis',   apellido: 'Pérez',   email: 'luis.perez@umg.edu.gt',   edad: 22 },
-    { id: 'a-3', nombre: 'Marta',  apellido: 'García',  email: 'marta.garcia@umg.edu.gt', edad: 21 },
+    {
+        id: 'a-1',
+        nombre: 'Ana',
+        apellido: 'López',
+        email: 'ana.lopez@umg.edu.gt',
+        edad: 20,
+    },
+    {
+        id: 'a-2',
+        nombre: 'Luis',
+        apellido: 'Pérez',
+        email: 'luis.perez@umg.edu.gt',
+        edad: 22,
+    },
+    {
+        id: 'a-3',
+        nombre: 'Marta',
+        apellido: 'García',
+        email: 'marta.garcia@umg.edu.gt',
+        edad: 21,
+    },
 ];
 
 export class RepositorioAlumnos {
@@ -25,52 +50,131 @@ export class RepositorioAlumnos {
      * @param {Alumno[]} alumnosIniciales
      */
     constructor(alumnosIniciales = []) {
-        this.alumnos = alumnosIniciales.map((alumno) => ({ ...alumno }));
-        this.siguienteId = this.alumnos.length + 1;
+        this.alumnos = alumnosIniciales.map(
+            (alumno) => ({
+                ...alumno,
+            }),
+        );
+
+        this.siguienteId =
+            this.alumnos.length + 1;
     }
 
     /**
      * Devuelve todos los alumnos.
+     *
+     * Se devuelve una copia para evitar que
+     * el arreglo interno sea modificado desde afuera.
+     *
      * @returns {Alumno[]}
      */
     listar() {
-        throw new Error('TODO: implementar RepositorioAlumnos.listar()');
+        return this.alumnos.map(
+            (alumno) => ({
+                ...alumno,
+            }),
+        );
     }
 
     /**
      * Busca un alumno por id.
+     *
      * @param {string} id
      * @returns {Alumno | undefined}
      */
     obtener(id) {
-        throw new Error('TODO: implementar RepositorioAlumnos.obtener()');
+        const alumno =
+            this.alumnos.find(
+                (item) => item.id === id,
+            );
+
+        if (!alumno) {
+            return undefined;
+        }
+
+        return {
+            ...alumno,
+        };
     }
 
     /**
-     * Crea un alumno nuevo. El id lo genera el repositorio (`a-1`, `a-2`, ...).
+     * Crea un alumno nuevo.
+     * El id lo genera el repositorio:
+     * a-1, a-2, a-3...
+     *
      * @param {Omit<Alumno, 'id'>} datos
      * @returns {Alumno}
      */
     crear(datos) {
-        throw new Error('TODO: implementar RepositorioAlumnos.crear()');
+        const nuevoAlumno = {
+            ...datos,
+            id: `a-${this.siguienteId++}`,
+        };
+
+        this.alumnos.push(
+            nuevoAlumno,
+        );
+
+        return {
+            ...nuevoAlumno,
+        };
     }
 
     /**
-     * Actualiza un alumno existente (solo los campos enviados).
+     * Actualiza un alumno existente.
+     * Solo modifica los campos enviados.
+     *
      * @param {string} id
      * @param {Partial<Omit<Alumno, 'id'>>} datos
-     * @returns {Alumno | undefined} el alumno actualizado, o undefined si no existe
+     * @returns {Alumno | undefined}
      */
     actualizar(id, datos) {
-        throw new Error('TODO: implementar RepositorioAlumnos.actualizar()');
+        const indice =
+            this.alumnos.findIndex(
+                (alumno) =>
+                    alumno.id === id,
+            );
+
+        if (indice === -1) {
+            return undefined;
+        }
+
+        const alumnoActualizado = {
+            ...this.alumnos[indice],
+            ...datos,
+            id,
+        };
+
+        this.alumnos[indice] =
+            alumnoActualizado;
+
+        return {
+            ...alumnoActualizado,
+        };
     }
 
     /**
      * Elimina un alumno por id.
+     *
      * @param {string} id
-     * @returns {boolean} true si lo eliminó, false si no existía
+     * @returns {boolean}
      */
     eliminar(id) {
-        throw new Error('TODO: implementar RepositorioAlumnos.eliminar()');
+        const indice =
+            this.alumnos.findIndex(
+                (alumno) =>
+                    alumno.id === id,
+            );
+
+        if (indice === -1) {
+            return false;
+        }
+
+        this.alumnos.splice(
+            indice,
+            1,
+        );
+
+        return true;
     }
 }
