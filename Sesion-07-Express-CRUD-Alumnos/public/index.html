@@ -2,74 +2,206 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD de Alumnos — Tarea Sesión 7</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CRUD de Alumnos — Tarea Sesión 7
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="styles.css"
+    >
 </head>
+
 <body>
+
     <header>
-        <h1>🎓 Gestión de Alumnos</h1>
-        <p>CRUD consumiendo la API REST con <strong>Fetch</strong> + <strong>Dialogs</strong></p>
+        <div class="encabezado">
+            <div>
+                <h1>🎓 Gestión de Alumnos</h1>
+
+                <p>
+                    CRUD consumiendo la API REST con
+                    <strong>Fetch</strong>
+                    +
+                    <strong>Dialogs</strong>
+                </p>
+            </div>
+        </div>
     </header>
 
     <main>
-        <button id="btnNuevo" type="button">➕ Nuevo alumno</button>
 
-        <!-- TODO: muestra aquí los errores o mensajes de éxito -->
-        <p id="mensaje" role="status"></p>
+        <section class="panel">
 
-        <!-- TODO: la tabla se llena desde app.js con fetch -->
-        <table id="tablaAlumnos">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Email</th>
-                    <th>Edad</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody><!-- TODO: filas generadas por JavaScript --></tbody>
-        </table>
+            <div class="barra-superior">
+                <div>
+                    <h2>Listado de alumnos</h2>
+
+                    <p>
+                        Administra los alumnos registrados.
+                    </p>
+                </div>
+
+                <button
+                    id="btnNuevo"
+                    type="button"
+                >
+                    ➕ Nuevo alumno
+                </button>
+            </div>
+
+            <p
+                id="mensaje"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <div class="tabla-contenedor">
+
+                <table id="tablaAlumnos">
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Email</th>
+                            <th>Edad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
     </main>
 
-    <!-- ============ DIALOG: crear / editar ============ -->
+    <!-- DIALOG CREAR / EDITAR -->
+
     <dialog id="dialogoForm">
-        <form id="formAlumno" method="dialog">
-            <h2 id="tituloForm">Nuevo alumno</h2>
 
-            <!-- TODO: cada input debe tener name, id, required y su <label> -->
-            <label for="nombre">Nombre</label>
-            <input id="nombre" name="nombre" type="text" required>
+        <form
+            id="formAlumno"
+            method="dialog"
+        >
 
-            <label for="apellido">Apellido</label>
-            <input id="apellido" name="apellido" type="text" required>
+            <h2 id="tituloForm">
+                Nuevo alumno
+            </h2>
 
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" required>
+            <label for="nombre">
+                Nombre
+            </label>
 
-            <label for="edad">Edad</label>
-            <input id="edad" name="edad" type="number" min="0">
+            <input
+                id="nombre"
+                name="nombre"
+                type="text"
+                required
+            >
 
-            <!-- TODO: evita que el formulario cierre el dialog por defecto -->
+            <label for="apellido">
+                Apellido
+            </label>
+
+            <input
+                id="apellido"
+                name="apellido"
+                type="text"
+                required
+            >
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                id="email"
+                name="email"
+                type="email"
+                required
+            >
+
+            <label for="edad">
+                Edad
+            </label>
+
+            <input
+                id="edad"
+                name="edad"
+                type="number"
+                min="0"
+            >
+
             <div class="acciones">
-                <button type="button" id="btnCancelar">Cancelar</button>
-                <button type="submit" id="btnGuardar">Guardar</button>
+
+                <button
+                    type="button"
+                    id="btnCancelar"
+                    class="btn-secundario"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="submit"
+                    id="btnGuardar"
+                    class="btn-principal"
+                >
+                    Guardar
+                </button>
+
             </div>
+
         </form>
+
     </dialog>
 
-    <!-- ============ DIALOG: confirmar eliminación ============ -->
+    <!-- DIALOG ELIMINAR -->
+
     <dialog id="dialogoEliminar">
+
         <h2>🗑️ Eliminar alumno</h2>
-        <p>¿Seguro que quieres eliminar a <strong id="nombreEliminar"></strong>?</p>
+
+        <p>
+            ¿Seguro que quieres eliminar a
+            <strong id="nombreEliminar"></strong>?
+        </p>
+
         <div class="acciones">
-            <button type="button" id="btnCancelarEliminar">Cancelar</button>
-            <button type="button" id="btnConfirmarEliminar">Eliminar</button>
+
+            <button
+                type="button"
+                id="btnCancelarEliminar"
+                class="btn-secundario"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="btnConfirmarEliminar"
+                class="btn-eliminar"
+            >
+                Eliminar
+            </button>
+
         </div>
+
     </dialog>
 
     <script src="app.js"></script>
+
 </body>
 </html>

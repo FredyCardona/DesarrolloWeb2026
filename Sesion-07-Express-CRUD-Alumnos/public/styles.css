@@ -1,75 +1,274 @@
-/* ============================================================
-   styles.css — Plantilla básica
-   Tarea Sesión 7 · Desarrollo Web · UMG
-   TODO: mejora estos estilos (puedes cambiar todo el diseño).
-   ============================================================ */
-
 :root {
     --color-primario: #4a148c;
-    --color-fondo: #f5f5f7;
+    --color-primario-claro: #7b1fa2;
+    --color-fondo: #f4f5f8;
+    --color-panel: #ffffff;
     --color-texto: #1f2937;
+    --color-secundario: #64748b;
+    --color-borde: #e2e8f0;
     --color-error: #c62828;
     --color-ok: #2e7d32;
+    --color-eliminar: #c62828;
 }
 
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    min-height: 100vh;
+
+    font-family:
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
     background: var(--color-fondo);
     color: var(--color-texto);
 }
 
 header {
-    background: var(--color-primario);
+    background:
+        linear-gradient(
+            135deg,
+            var(--color-primario),
+            var(--color-primario-claro)
+        );
+
     color: white;
-    padding: 16px 24px;
+    padding: 26px 24px;
 }
 
-header h1 { margin: 0 0 4px 0; }
-header p { margin: 0; opacity: 0.85; font-size: 14px; }
-
-main { max-width: 900px; margin: 24px auto; padding: 0 16px; }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    margin-top: 16px;
-    border-radius: 8px;
-    overflow: hidden;
+.encabezado {
+    max-width: 1050px;
+    margin: 0 auto;
 }
 
-th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
-th { background: #ede7f6; }
-tbody tr:hover { background: #f9fafb; }
+header h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+}
 
-button {
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 14px;
+header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+main {
+    max-width: 1050px;
+    margin: 30px auto;
+    padding: 0 18px;
+}
+
+.panel {
+    background: var(--color-panel);
+
+    border-radius: 14px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.08);
+}
+
+.barra-superior {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.barra-superior h2 {
+    margin: 0 0 4px;
+}
+
+.barra-superior p {
+    margin: 0;
+    color: var(--color-secundario);
     font-size: 14px;
 }
 
-#btnNuevo { background: var(--color-primario); color: white; }
-
-dialog {
+button {
     border: none;
-    border-radius: 10px;
-    padding: 20px 24px;
-    min-width: 340px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    border-radius: 7px;
+
+    padding: 9px 14px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
 }
 
-dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
 
-label { display: block; margin-top: 10px; font-size: 14px; font-weight: 600; }
-input { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #cbd5e1; border-radius: 6px; }
+#btnNuevo,
+.btn-principal {
+    background: var(--color-primario);
+    color: white;
+}
 
-.acciones { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.btn-secundario {
+    background: #e2e8f0;
+    color: var(--color-texto);
+}
 
-#mensaje { min-height: 20px; font-size: 14px; }
-#mensaje.error { color: var(--color-error); }
-#mensaje.ok { color: var(--color-ok); }
+.btn-editar {
+    background: #ede7f6;
+    color: var(--color-primario);
+}
+
+.btn-eliminar {
+    background: var(--color-eliminar);
+    color: white;
+}
+
+#mensaje {
+    min-height: 22px;
+    margin: 16px 0 4px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#mensaje.ok {
+    color: var(--color-ok);
+}
+
+#mensaje.error {
+    color: var(--color-error);
+}
+
+.tabla-contenedor {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+
+    margin-top: 12px;
+
+    border-collapse: collapse;
+
+    background: white;
+}
+
+th,
+td {
+    padding: 12px 14px;
+
+    text-align: left;
+
+    border-bottom:
+        1px solid var(--color-borde);
+}
+
+th {
+    background: #f3eaf9;
+    color: #3f0d70;
+}
+
+tbody tr:hover {
+    background: #faf8fc;
+}
+
+.acciones-tabla {
+    display: flex;
+    gap: 7px;
+}
+
+dialog {
+    width: min(430px, 90vw);
+
+    border: none;
+    border-radius: 14px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 18px 55px
+        rgba(0, 0, 0, 0.3);
+}
+
+dialog::backdrop {
+    background:
+        rgba(15, 23, 42, 0.55);
+}
+
+dialog h2 {
+    margin-top: 0;
+}
+
+label {
+    display: block;
+
+    margin-top: 13px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+
+    padding: 10px;
+
+    margin-top: 5px;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius: 7px;
+
+    font: inherit;
+}
+
+input:focus {
+    outline:
+        2px solid
+        rgba(74, 20, 140, 0.18);
+
+    border-color:
+        var(--color-primario);
+}
+
+.acciones {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    margin-top: 22px;
+}
+
+@media (max-width: 700px) {
+
+    .barra-superior {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    #btnNuevo {
+        width: 100%;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .acciones-tabla {
+        flex-direction: column;
+    }
+}
