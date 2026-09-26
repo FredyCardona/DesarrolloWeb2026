@@ -1,0 +1,2 @@
+Agrega aquí tus screenshots funcionales antes de subir la tarea.
+Sugeridas: npm test, GET /estudiantes, login con token, POST 201 y tabla en Postgres.

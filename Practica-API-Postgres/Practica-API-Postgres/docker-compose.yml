@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: pg-web
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secreto
+      POSTGRES_DB: web
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_web_data:/var/lib/postgresql/data
+
+volumes:
+  pg_web_data:
